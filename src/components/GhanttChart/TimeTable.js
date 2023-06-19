@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { monthDiff } from '../../helpers/dateFunctions';
 
-export default function TimeTable() {
+export default function TimeTable({
+  timeRange,
+  tasks,
+  taskDurations,
+  setTaskDurations,
+}) {
   // for dynamic css styling
   const ganttTimePeriod = {
     display: 'grid',

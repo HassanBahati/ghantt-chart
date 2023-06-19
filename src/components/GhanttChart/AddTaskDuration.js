@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AddButton from './AddButton';
 
-export default function AddTaskDuration() {
+export default function AddTaskDuration({tasks, setTaskDurations}) {
   const [task, setTask] = useState('');
   const [startDate, setStartDate] = useState('2022-01-01');
   const [endDate, setEndDate] = useState('2022-01-03');

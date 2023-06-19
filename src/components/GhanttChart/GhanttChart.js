@@ -1,5 +1,12 @@
 import { client } from "@/utils/fetchWrapper";
 import { useState, useEffect } from "react";
+import AddTaskDuration from "./AddTaskDuration";
+import AddTask from "./AddTask";
+import Grid from "./Grid";
+import Settings from "./Settings";
+import Tasks from "./Tasks";
+import TimeRange from "./TimeRange";
+import TimeTable from "./TimeTable";
 
 export default function GanttChart() {
   const [tasks, setTasks] = useState(null);
@@ -23,6 +30,8 @@ export default function GanttChart() {
     );
   }, []);
 
+
+  
   return (
     <div id="gantt-container">
       <style jsx>{`
@@ -39,6 +48,25 @@ export default function GanttChart() {
           padding: 1rem;
         }
       `}</style>
-    </div>
+
+      <Grid>
+        <Tasks
+          tasks={tasks}
+          setTasks={setTasks}
+          setTaskDurations={setTaskDurations}
+        />
+        <TimeTable
+          timeRange={timeRange}
+          tasks={tasks}
+          taskDurations={taskDurations}
+          setTaskDurations={setTaskDurations}
+        />
+      </Grid>
+      <Settings>
+        <AddTask setTasks={setTasks} tasks={tasks}/>
+        <AddTaskDuration tasks={tasks} setTaskDurations={setTaskDurations} />
+        <TimeRange timeRange={timeRange} setTimeRange={setTimeRange} />
+      </Settings>
+    </div>  
   );
 }

@@ -1,6 +1,6 @@
-import { months } from '../../constants';
+import { months } from '@/utils/constants';
 
-export default function TimeRange() {
+export default function TimeRange({timeRange, setTimeRange}) {
   // add date selector values
   let monthsOptions = [];
   for (let i = 0; i < months.length; i++) {

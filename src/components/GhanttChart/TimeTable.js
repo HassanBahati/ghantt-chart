@@ -148,7 +148,7 @@ export default function TimeTable({
               data-date={formattedDate}
               onDrop={onTaskDurationDrop}
             >
-              {taskDurations.map((el, i) => {
+              {taskDurations?.map((el, i) => {
                 if (el?.task === task?.id && el?.start === formattedDate) {
                   return (
                     <div
@@ -239,6 +239,8 @@ export default function TimeTable({
     setTaskDurationElDraggedId(null);
   }
 
+
+  console.log("durations received", taskDurations)
   return (
     <div
       id="gantt-grid-container__time"

@@ -1,6 +1,27 @@
-import GanttChart from '@/components/GhanttChart/GhanttChart';
-import Head from 'next/head';
+import GanttChart from "@/components/GhanttChart/GhanttChart";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 export default function Home() {
+  const [data, setData] = useState();
+
+  async function FetchData(params) {
+    await fetch(`${process.env.NEXT_PUBLIC_API}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the JSON data
+        setData(data?.data);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error("Error:", error);
+      });
+  }
+
+  console.log("data", data);
+  useEffect(() => {
+    FetchData();
+  }, []);
+
   return (
     <div>
       <Head>

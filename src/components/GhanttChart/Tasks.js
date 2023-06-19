@@ -1,8 +1,11 @@
 import { useEffect, useRef } from "react";
 
 export default function Tasks({ tasks, setTasks, setTaskDurations }) {
+  const inputRef = useRef([]);
+  const indexRef = useRef(null);
+
   function handleDelete(e) {
-    const idNum = parseInt(e.target.getAttribute('data-task-id'));
+    const idNum = parseInt(e.target.getAttribute("data-task-id"));
     const newTasks = tasks.filter((task) => task.id !== idNum);
     // update state (if data on backend - make API request to update data)
     setTasks(newTasks);
@@ -15,6 +18,24 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
       return newTaskDurations;
     });
   }
+
+  function onChange(e, i) {
+    indexRef.current = i;
+    const { value } = e.target;
+    const idNum = parseInt(e.target.getAttribute("data-task-id"));
+
+    let newTasks = tasks.filter((task) => task.id !== idNum);
+    newTasks.push({ id: idNum, name: value });
+    newTasks = newTasks.sort((a, b) => a.id - b.id);
+    // update state (if data on backend - make API request to update data)
+    setTasks(newTasks);
+  }
+
+  useEffect(() => {
+    if (inputRef.current.length && indexRef.current >= 0) {
+      inputRef?.current[indexRef.current]?.focus();
+    }
+  });
   return (
     <div id="gantt-grid-container__tasks">
       <div className="gantt-task-row"></div>
@@ -58,8 +79,13 @@ export default function Tasks({ tasks, setTasks, setTaskDurations }) {
       {tasks &&
         tasks.map((tsk, i) => (
           <div key={`${i}-${tsk?.id}-${tsk.name}`} className="gantt-task-row">
-            <input data-task-id={tsk?.id} value={tsk?.name} />
-            <button type="button" data-task-id={tsk?.id} onClick={handleDelete} >
+            <input
+              data-task-id={tsk?.id}
+              value={tsk?.name}
+              onChange={(e) => onChange(e, i)}
+              ref={(el) => (inputRef.current[i] = el)}
+            />
+            <button type="button" data-task-id={tsk?.id} onClick={handleDelete}>
               x
             </button>
           </div>

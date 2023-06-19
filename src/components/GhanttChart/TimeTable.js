@@ -46,6 +46,7 @@ export default function TimeTable({
     cursor: "move",
   };
 
+  const [taskDurationElDraggedId, setTaskDurationElDraggedId] = useState(null);
   // creating rows
   const startMonth = new Date(
     parseInt(timeRange.fromSelectYear),
@@ -145,21 +146,26 @@ export default function TimeTable({
               }}
               data-task={task?.id}
               data-date={formattedDate}
+              onDrop={onTaskDurationDrop}
             >
               {taskDurations.map((el, i) => {
                 if (el?.task === task?.id && el?.start === formattedDate) {
                   return (
                     <div
-                      onKeyDown={(e) => deleteTaskDuration(e, el?.id)}
                       key={`${i}-${el?.id}`}
+                      draggable="true"
                       tabIndex="0"
+                      onDragStart={() => handleDragStart(el?.id)}
                       style={{
                         ...taskDuration,
                         width: `calc(${dayDiff(
                           el?.start,
                           el?.end
                         )} * 100% - 1px)`,
+                        opacity:
+                          taskDurationElDraggedId === el?.id ? "0.5" : "1",
                       }}
+                      onKeyDown={(e) => deleteTaskDuration(e, el?.id)}
                     ></div>
                   );
                 }
@@ -190,6 +196,49 @@ export default function TimeTable({
       setTaskDurations(newTaskDurations);
     }
   }
+
+  function handleDragStart(taskDurationId) {
+    console.log(taskDurationId);
+    setTaskDurationElDraggedId(taskDurationId);
+  }
+
+  function onTaskDurationDrop(e) {
+    const targetCell = e.target;
+    // prevent adding on another taskDuration
+    if (!targetCell.hasAttribute("draggable")) {
+      // find task
+      const taskDuration = taskDurations.filter(
+        (taskDuration) => taskDuration.id === taskDurationElDraggedId
+      )[0];
+
+      const dataTask = targetCell.getAttribute("data-task");
+      const dataDate = targetCell.getAttribute("data-date");
+
+      const daysDuration = dayDiff(taskDuration.start, taskDuration.end);
+
+      // get new task values
+      // get start, calc end using daysDuration - make Date objects - change taskDurations
+      const newTask = parseInt(dataTask);
+      const newStartDate = new Date(dataDate);
+      let newEndDate = new Date(dataDate);
+      newEndDate.setDate(newEndDate.getDate() + daysDuration - 1);
+
+      // update taskDurations
+      taskDuration.task = newTask;
+      taskDuration.start = createFormattedDateFromDate(newStartDate);
+      taskDuration.end = createFormattedDateFromDate(newEndDate);
+
+      const newTaskDurations = taskDurations.filter(
+        (taskDuration) => taskDuration.id !== taskDurationElDraggedId
+      );
+      newTaskDurations.push(taskDuration);
+
+      // update state (if data on backend - make API request to update data)
+      setTaskDurations(newTaskDurations);
+    }
+    setTaskDurationElDraggedId(null);
+  }
+
   return (
     <div
       id="gantt-grid-container__time"
@@ -199,6 +248,7 @@ export default function TimeTable({
       {dayRows}
       {weekRows}
       <div
+        onDragOver={(e) => e.preventDefault()}
         id="gantt-time-period-cell-container"
         style={{
           gridColumn: "1/-1",

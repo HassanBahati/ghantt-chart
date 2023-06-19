@@ -1,6 +1,6 @@
-import { months } from '@/utils/constants';
+import { months } from "@/utils/constants";
 
-export default function TimeRange({timeRange, setTimeRange}) {
+export default function TimeRange({ timeRange, setTimeRange }) {
   // add date selector values
   let monthsOptions = [];
   for (let i = 0; i < months.length; i++) {
@@ -22,28 +22,48 @@ export default function TimeRange({timeRange, setTimeRange}) {
 
   function onChange(e) {
     const { value, id } = e.target;
+    if (id === "from-select-month") {
+      setTimeRange((prevState) => {
+        return { ...prevState, fromSelectMonth: value };
+      });
+    }
+    if (id === "from-select-year") {
+      setTimeRange((prevState) => {
+        return { ...prevState, fromSelectYear: value };
+      });
+    }
+    if (id === "to-select-month") {
+      setTimeRange((prevState) => {
+        return { ...prevState, toSelectMonth: value };
+      });
+    }
+    if (id === "to-select-year") {
+      setTimeRange((prevState) => {
+        return { ...prevState, toSelectYear: value };
+      });
+    }
   }
 
   return (
     <div id="time-range__container">
       <h2>Tracker Period</h2>
       <div id="time-range">
-        <fieldset id="select-from" style={{ paddingLeft: '0px' }}>
+        <fieldset id="select-from" style={{ paddingLeft: "0px" }}>
           <legend>From</legend>
           <select
             id="from-select-month"
             name="from-select-month"
-            value={null}
             onChange={onChange}
+            value={timeRange?.fromSelectMonth}
           >
             {monthsOptions}
           </select>
           <select
             id="from-select-year"
             name="from-select-year"
-            value={null}
+            value={timeRange?.fromSelectYear}
             onChange={onChange}
-            style={{ marginLeft: '5px' }}
+            style={{ marginLeft: "5px" }}
           >
             {yearsOptions}
           </select>
@@ -54,7 +74,7 @@ export default function TimeRange({timeRange, setTimeRange}) {
           <select
             id="to-select-month"
             name="to-select-month"
-            value={null}
+            value={timeRange.toSelectMonth}
             onChange={onChange}
           >
             {monthsOptions}
@@ -62,9 +82,9 @@ export default function TimeRange({timeRange, setTimeRange}) {
           <select
             id="to-select-year"
             name="to-select-year"
-            value={null}
+            value={timeRange.toSelectYear}
             onChange={onChange}
-            style={{ marginLeft: '5px' }}
+            style={{ marginLeft: "5px" }}
           >
             {yearsOptions}
           </select>

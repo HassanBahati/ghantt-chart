@@ -22,6 +22,19 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (task === "") return;
+    const timeStamp = Date.now();
+    const newTaskDuration = {
+      id: timeStamp,
+      start: startDate,
+      end: endDate,
+      task: parseInt(task),
+    };
+
+    setTaskDurations((prevState) => {
+      const newState = prevState;
+      return [...newState, newTaskDuration];
+    });
   }
 
   return (

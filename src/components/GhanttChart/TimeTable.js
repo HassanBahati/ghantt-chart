@@ -8,6 +8,8 @@ import {
   dayDiff,
 } from "../../helpers/dateFunctions";
 import { months } from "@/utils/constants";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function TimeTable({
   timeRange,
@@ -47,6 +49,7 @@ export default function TimeTable({
   };
 
   const [taskDurationElDraggedId, setTaskDurationElDraggedId] = useState(null);
+  const router = useRouter();
   // creating rows
   const startMonth = new Date(
     parseInt(timeRange.fromSelectYear),
@@ -151,22 +154,27 @@ export default function TimeTable({
               {taskDurations?.map((el, i) => {
                 if (el?.task === task?.id && el?.start === formattedDate) {
                   return (
-                    <div
-                      key={`${i}-${el?.id}`}
-                      draggable="true"
-                      tabIndex="0"
-                      onDragStart={() => handleDragStart(el?.id)}
-                      style={{
-                        ...taskDuration,
-                        width: `calc(${dayDiff(
-                          el?.start,
-                          el?.end
-                        )} * 100% - 1px)`,
-                        opacity:
-                          taskDurationElDraggedId === el?.id ? "0.5" : "1",
-                      }}
-                      onKeyDown={(e) => deleteTaskDuration(e, el?.id)}
-                    ></div>
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_ACTIVITIES_REDIRECT}/${el.task}`}
+                      passHref
+                    >
+                      <div
+                        key={`${i}-${el?.id}`}
+                        draggable="true"
+                        tabIndex="0"
+                        onDragStart={() => handleDragStart(el?.id)}
+                        style={{
+                          ...taskDuration,
+                          width: `calc(${dayDiff(
+                            el?.start,
+                            el?.end
+                          )} * 100% - 1px)`,
+                          opacity:
+                            taskDurationElDraggedId === el?.id ? "0.5" : "1",
+                        }}
+                        onKeyDown={(e) => deleteTaskDuration(e, el?.id)}
+                      ></div>
+                    </Link>
                   );
                 }
               })}
@@ -239,8 +247,7 @@ export default function TimeTable({
     setTaskDurationElDraggedId(null);
   }
 
-
-  console.log("durations received", taskDurations)
+  console.log("durations received", taskDurations);
   return (
     <div
       id="gantt-grid-container__time"

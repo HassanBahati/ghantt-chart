@@ -3,8 +3,8 @@ import AddButton from "./AddButton";
 
 export default function AddTaskDuration({ tasks, setTaskDurations }) {
   const [task, setTask] = useState("");
-  const [startDate, setStartDate] = useState("2022-01-01");
-  const [endDate, setEndDate] = useState("2022-01-03");
+  const [startDate, setStartDate] = useState("2022-07-01");
+  const [endDate, setEndDate] = useState("2023-07-01");
 
   function onChange(e) {
     const { value, id } = e.target;
@@ -68,7 +68,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
               id="start-date"
               name="start-date"
               value={startDate}
-              min="2022-01-01"
+              min="2022-07-01"
               max="2050-12-31"
               onChange={onChange}
             />
@@ -80,7 +80,7 @@ export default function AddTaskDuration({ tasks, setTaskDurations }) {
               id="end-date"
               name="end-date"
               value={endDate}
-              min="2022-01-01"
+              min="2022-07-01"
               max="2050-12-31"
               onChange={onChange}
             />

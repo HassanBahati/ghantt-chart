@@ -8,8 +8,8 @@ function flattenTaskDurations(tasks) {
 
     const taskDuration = {
       id: taskId,
-      start: task?.start_date,
-      end: task?.due_date,
+      start: task?.start,
+      end: task?.end,
       task: task.id,
     };
     

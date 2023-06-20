@@ -13,9 +13,9 @@ export default function GanttChart() {
   const [tasks, setTasks] = useState(null);
   const [taskDurations, setTaskDurations] = useState(null);
   const [timeRange, setTimeRange] = useState({
-    fromSelectMonth: 0,
+    fromSelectMonth: 5,
     fromSelectYear: "2023",
-    toSelectMonth: 1,
+    toSelectMonth: 7,
     toSelectYear: "2024",
   });
 
